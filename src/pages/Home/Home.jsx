@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 
 const Home = () => {
     const [countries, setCountries] = useState([]);
+    const navigate= useNavigate(); 
 
     useEffect(() => {
         fetch('countries.json')
@@ -10,10 +12,10 @@ const Home = () => {
             .then(data => setCountries(data))
     }, [])
 
-    const handleSelectCountry=(code)=>{
-        fetch(`https://newsdata.io/api/1/latest?apikey=pub_8d3348ec0319466997ce59e93a60e686&country=${code}`)        
-        .then(res=>res.json())
-        .then(data=>console.log(data))
+    const handleSelectCountry = (code) => {
+        fetch(`https://newsdata.io/api/1/latest?apikey=pub_8d3348ec0319466997ce59e93a60e686&country=${code}`)
+            .then(res => res.json())
+            .then(data => console.log(data))
     }
     return (
         <div>
@@ -23,7 +25,11 @@ const Home = () => {
                 <ul tabIndex="-1" className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                     {
                         countries.map(country => <li key={country.code}>
-                            <a onClick={()=>handleSelectCountry(country.code)}>{country.name}</a>
+                            <a onClick={() => {
+                                handleSelectCountry(country.code); 
+                                navigate(`/countryNews/${country.code}`); 
+                            }}>{country.name}</a>
+
                         </li>)
                     }
                 </ul>
